@@ -1,0 +1,110 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    margin: 0;
+    height: 100vh;
+}
+
+h1 {
+    color: #333;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(20, 20px);
+    gap: 1px;
+    background-color: #000;
+    border: 1px solid #000;
+    margin-block-end: 10px;
+}
+
+.cell {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    border-radius: 2px;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cell:nth-child(odd) {
+    background-color: #e0e0e0;
+}
+
+.cell:nth-child(even) {
+    background-color: #fff;
+}
+
+.cell:hover {
+    background-color: #ddd;
+}
+
+.cell.x {
+    color: #ff4136;
+}
+
+.cell.o {
+    color: #0074d9;
+}
+
+#info-panel {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
+
+#current-player, #score {
+    margin-bottom: 10px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+button {
+    background-color: rgb(6, 105, 185);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+@media (max-width: 600px) {
+    #game-container {
+        flex-direction: column;
+    }
+
+    #board {
+        grid-template-columns: repeat(20, 15px);
+    }
+
+    .cell {
+        width: 15px;
+        height: 15px;
+        font-size: 10px;
+    }
+
+    #info-panel {
+        margin-left: 0;
+        margin-top: 20px;
+    }
+}
