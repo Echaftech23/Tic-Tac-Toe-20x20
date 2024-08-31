@@ -44,3 +44,44 @@ function handleCellClick(e) {
     }
   }
 }
+
+function checkWin(row, col) {
+  const directions = [
+    [0, 1],
+    [1, 0],
+    [1, 1],
+    [1, -1],
+  ];
+
+  for (let [dx, dy] of directions) {
+    let count = 1;
+    for (let i = 1; i < 5; i++) {
+      const newRow = row + i * dx;
+      const newCol = col + i * dy;
+      if (newRow < 0 || newRow >= 20 || newCol < 0 || newCol >= 20 || gameBoard[newRow][newCol] !== currentPlayer) {
+          break;
+      }
+      count++;
+  }
+
+  for (let i = 1; i < 5; i++) {
+      const newRow = row - i * dx;
+      const newCol = col - i * dy;
+      if (newRow < 0 || newRow >= 20 || newCol < 0 || newCol >= 20 || gameBoard[newRow][newCol] !== currentPlayer) {
+          break;
+      }
+      count++;
+  }
+
+    if (count >= 5) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function checkDraw() {
+  return gameBoard.every((row) => row.every((cell) => cell !== ""));
+}
+
