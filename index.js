@@ -1,7 +1,10 @@
 const board = document.getElementById("board");
 const currentPlayerDisplay = document.getElementById("current-player");
-const scoreDisplay = document.getElementById("score");
+const currentPlayerIndicator = document.querySelector(".current-player-indicator");
 const restartButton = document.getElementById("restart");
+
+const scoreX = document.getElementById("score-x");
+const scoreO = document.getElementById("score-o");
 
 let currentPlayer = "X";
 let gameBoard = Array(20)
@@ -85,3 +88,48 @@ function checkDraw() {
   return gameBoard.every((row) => row.every((cell) => cell !== ""));
 }
 
+function resetBoard() {
+  gameBoard = Array(20)
+    .fill()
+    .map(() => Array(20).fill(""));
+  document.querySelectorAll(".cell").forEach((cell) => {
+    cell.textContent = "";
+    cell.classList.remove("x", "o");
+  });
+  currentPlayer = "X";
+  updateCurrentPlayer();
+}
+
+function updateCurrentPlayer() {
+  currentPlayerDisplay.textContent = `${currentPlayer}`;
+  currentPlayerIndicator.style.backgroundColor = currentPlayer === "X" ? "#ff4136" : "#159282";
+}
+
+function updateScore() {
+  scoreX.textContent = `${score.X}`;
+  scoreO.textContent = `${score.O}`;
+}
+
+function saveScore() {
+  localStorage.setItem("ticTacToeScore", JSON.stringify(score));
+}
+
+function loadScore() {
+  const savedScore = localStorage.getItem("ticTacToeScore");
+  if (savedScore) {
+    score = JSON.parse(savedScore);
+    updateScore();
+  }
+}
+
+restartButton.addEventListener("click", () => {
+  resetBoard();
+  updateScore();
+});
+
+createBoard();
+updateScore();
+createBoard(20);
+
+window.addEventListener("beforeunload", saveScore);
+loadScore();

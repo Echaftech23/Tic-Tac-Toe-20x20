@@ -1,24 +1,64 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tic Tac Toe 20x20 - MediaGame</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <!-- <h1>Tic Tac Toe 20x20 - MediaGame</h1> -->
-    <div id="game-container">
-        <div id="info-panel">
-            <div id="current-player">Joueur actuel : X</div>
-            <div id="score">Score : X (0) - O (0)</div>
-            
+    <header>
+      <nav>
+        <div class="logo">
+          <img src="logo.jpg" alt="MediaGame" />
         </div>
-        <div id="board"></div>
-        <div class="button-container">
-            <button id="restart">Restart Game</button>
+
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="about.html">A propos</a></li>
+          <li><a href="conditions.html">Conditions d'utilisation</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="game-container">
+      <div id="board"></div>
+      <!-- Info Panel -->
+      <div id="info-panel">
+        <h2>Informations du jeu</h2>
+        <div class="current-player-section">
+          <p>Joueur actuel :</p>
+          <div class="current-player-indicator">
+            <span id="current-player">X</span>
+          </div>
         </div>
-    </div>
+
+        <div class="scoreboard-section">
+          <h3>Score</h3>
+          <table class="scoreboard">
+            <tr>
+              <th>Joueur X</th>
+              <th>Joueur O</th>
+            </tr>
+            <tr>
+              <td id="score-x">0</td>
+              <td id="score-o">0</td>
+            </tr>
+          </table>
+        </div>
+        <button id="restart">Recommencer la partie</button>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 2024 Tic-Tac-Toe Game. All rights reserved.</p>
+      </div>
+    </footer>
+
     <script src="index.js"></script>
-</body>
+  </body>
 </html>
