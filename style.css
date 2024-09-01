@@ -90,23 +90,30 @@ h1 {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s;
-    background-color: #B2B37D;
+    background-color: #000;
     border: 1px solid #fff;
 }
 
-.cell:hover {
-    background-color: #ddd;
+/* Applying chessboard pattern */
+.cell:nth-child(40n+1), .cell:nth-child(40n+3), .cell:nth-child(40n+5), .cell:nth-child(40n+7), 
+.cell:nth-child(40n+9), .cell:nth-child(40n+11), .cell:nth-child(40n+13), .cell:nth-child(40n+15),
+.cell:nth-child(40n+17), .cell:nth-child(40n+19), .cell:nth-child(40n+22), .cell:nth-child(40n+24),
+.cell:nth-child(40n+26), .cell:nth-child(40n+28), .cell:nth-child(40n+30), .cell:nth-child(40n+32),
+.cell:nth-child(40n+34), .cell:nth-child(40n+36), .cell:nth-child(40n+38), .cell:nth-child(40n+40) {
+    background-color: #fff;
 }
 
+/* Colors for X and O cells */
 .cell.x {
     color: #fff;
-    background-color: #ff4136;
+    background-color: #ff4136 !important;
 }
 
 .cell.o {
     color: #fff;
-    background-color: #159282;
+    background-color: #159282 !important;
 }
+
 
 #game-container {
     display: flex;
