@@ -6,6 +6,11 @@ const restartButton = document.getElementById("restart");
 const scoreX = document.getElementById("score-x");
 const scoreO = document.getElementById("score-o");
 
+
+document.querySelector('.menu-toggle').addEventListener('click', function() {
+  document.querySelector('.menu').classList.toggle('active');
+});
+
 let currentPlayer = "X";
 let gameBoard = Array(20)
   .fill()
@@ -27,6 +32,9 @@ function handleCellClick(e) {
   const index = e.target.dataset.index;
   const row = Math.floor(index / 20);
   const col = index % 20;
+
+  e.target.style.borderRadius = "4px";
+  e.target.style.border = "1px solid #fff";
 
   if (gameBoard[row][col] === "") {
     gameBoard[row][col] = currentPlayer;

@@ -45,11 +45,64 @@ header {
 }
 
 nav{
-    width: 80%;
+    width: 85%;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+/* General Header Styles */
+header {
+    background-color: #333;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+/* Mobile Menu Styles */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        padding-block: 40px;
+        background-color: #333;
+        width: 100%;
+        text-align: center;
+    }
+
+    .menu.active {
+        display: flex;
+    }
+
+    ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    ul li a {
+        padding: 10px 0;
+        border-bottom: 1px solid #444;
+    }
 }
 
 ul {
@@ -64,26 +117,23 @@ h1 {
 }
 
 #game-container {
-    width: 80%;
+    width: 85%;
     margin: 0 auto;
-    display: flex;        
-    justify-items: space-between;
-    padding: 20px;
-    border-radius: 4px;
+    display: flex;
 }
 
 #board {
     width: 60%;
     display: grid;
-    grid-template-columns: repeat(20, 30px);
-    gap: 2px;
+    grid-template-columns: repeat(20, 33px);
+    border: 3px solid #333;
 }
 
 .cell {
-    width: 25px;
-    height: 25px;
+    width: 31.2px;
+    height: 31.2px;
     display: flex;
-    border-radius: 2px;
+    /* border-radius: 2px; */
     justify-content: center;
     align-items: center;
     font-size: 14px;
@@ -91,7 +141,6 @@ h1 {
     cursor: pointer;
     transition: background-color 0.3s;
     background-color: #000;
-    border: 1px solid #fff;
 }
 
 /* Applying chessboard pattern */
@@ -118,17 +167,16 @@ h1 {
 #game-container {
     display: flex;
     align-items: flex-start;
-    padding: 30px 60px;
-    gap: 20px;
+    padding: 40px;
+    gap: 50px;
 }
 
 #info-panel {
     background-color: #ffffff;
-    border-radius: 8px;
+    border-radius: 4px;
     padding: 30px;
     flex: 1;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    /* text-align: center; */
 }
 
 #info-panel h2 {
@@ -216,73 +264,65 @@ h1 {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    nav .logo{
+        width: 50px;
+        height: 50px;
+    }
+    ul{
+        display: none;
+    }
+
     #game-container {
+        width: 100%;
         flex-direction: column;
         align-items: center;
-        padding: 20px;
+        gap: 20px;
+        padding: 0 20px;
+        margin: 0;
+    }
+
+    #board {
+        width: 100%;
+        grid-template-columns: repeat(20, 12px);
+    }
+
+    .cell {
+        width: 12px;
+        height: 12px;
+        font-size: 12px;
     }
 
     #info-panel {
         width: 100%;
-        max-width: 400px;
         margin-top: 20px;
     }
-}
 
-
-@media (max-width: 600px) {
-    #game-container {
-        flex-direction: column;
+    #info-panel h2 {
+        font-size: 20px;
     }
 
-    #board {
-        grid-template-columns: repeat(20, 15px);
+    .current-player-indicator {
+        width: 40px;
+        height: 40px;
+        margin: 20px auto;
     }
 
-    .cell {
-        width: 15px;
-        height: 15px;
-        font-size: 10px;
+    .current-player-indicator span {
+        font-size: 15px;
     }
 
-    #info-panel {
-        margin-left: 0;
-        margin-top: 20px;
+    .scoreboard-section h3 {
+        font-size: 18px;
     }
 }
 
 /* Footer Styles */
 footer {
-    padding: 20px 0;
-    text-align: center;
-    position: relative;
-    width: 100%;
+    padding: 30px 0;
     margin-top: 30px;
-}
-
-.footer-content {
-    max-width: 1000px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+    text-align: center;
 }
 
 .footer-content p {
-    font-size: 14px;
-    margin: 0;
-}
-
-/* Responsive Footer */
-@media (max-width: 600px) {
-    .footer-content {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .footer-links {
-        flex-direction: column;
-        gap: 10px;
-    }
+    font-size: clamp(16px, 1.5vw, 16px);
 }
