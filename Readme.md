@@ -1,174 +1,163 @@
-### Tic Tac Toe 20x20 Media Game
+# Tic Tac Toe 20x20
 
+## Table of Contents
+1. [Project Context](#project-context)
+2. [Game Overview](#game-overview)
+3. [Features](#features)
+4. [Technologies Used](#technologies-used)
+5. [Game Rules](#game-rules)
+6. [Installation](#installation)
+7. [How to Play](#how-to-play)
+8. [Game Interface](#game-interface)
+9. [Game Mechanics](#game-mechanics)
+10. [Additional Functions](#additional-functions)
+11. [Design and Responsiveness](#design-and-responsiveness)
+12. [Code Structure](#code-structure)
+13. [Future Enhancements](#future-enhancements)
+14. [Contributing](#contributing)
+15. [License](#license)
 
-const board = document.getElementById("board");
-const currentPlayerDisplay = document.getElementById("current-player");
-const currentPlayerIndicator = document.querySelector(".current-player-indicator");
-const restartButton = document.getElementById("restart");
+## Project Context
 
-const scoreX = document.getElementById("score-x");
-const scoreO = document.getElementById("score-o");
+MediaGame, an online gaming start-up, aims to enhance user experience by introducing new games. As part of this initiative, they have developed a 20x20 Tic Tac Toe game.
 
-document.querySelector('.menu-toggle').addEventListener('click', function() {
-  document.querySelector('.menu').classList.toggle('active');
-});
+## Game Overview
 
-let playerX = "X";
-let playerO = "O";
-let currentPlayer;
-let gameBoard = Array(20)
-  .fill()
-  .map(() => Array(20).fill(""));
-let score = { X: 0, O: 0 };
+This project implements a two-player Tic Tac Toe game on a 20x20 grid using HTML, CSS, and JavaScript. The game utilizes DOM manipulation and local storage for data persistence.
 
-// On game page load, retrieve symbols from local storage
-function loadPlayerSymbols() {
-  playerX = localStorage.getItem("playerX") || "X";
-  playerO = localStorage.getItem("playerO") || "O";
+## Features
 
-  console.log(playerX, playerO);
+- 20x20 game board
+- Two-player gameplay
+- Symbol selection for players
+- Score tracking
+- Responsive design for various devices
+- New game option without page refresh
 
-  // Randomly decide who starts first
-  currentPlayer = Math.random() < 0.5 ? playerX : playerO;
-  updateCurrentPlayer();
-}
+## Technologies Used
 
-function createBoard(col) {
-  for (let i = 0; i < col * col; i++) {
-    const cell = document.createElement("div");
-    cell.classList.add("cell");
-    cell.dataset.index = i;
-    cell.addEventListener("click", handleCellClick);
-    board.appendChild(cell);
-    board.style.gridTemplateColumns = `repeat(${col}, 1fr)`;
-  }
-}
+- HTML5
+- CSS3
+- JavaScript (ES6+)
+- Local Storage API
 
-function handleCellClick(e) {
-  const index = e.target.dataset.index;
-  const row = Math.floor(index / 20);
-  const col = index % 20;
+## Game Rules
 
-  this.style.borderRadius = "4px";
-  this.style.border = "1px solid #fff";
+1. The game is played on a 20x20 grid.
+2. Two players take turns marking empty cells with their chosen symbols (typically X and O).
+3. Player 1 starts the game.
+4. The goal is to form a straight line of 5 consecutive symbols (horizontally, vertically, or diagonally).
+5. The first player to achieve this wins the game.
+6. If all cells are filled and no player has won, the game is a draw.
 
-  if (gameBoard[row][col] === "") {
-    gameBoard[row][col] = currentPlayer;
-    this.textContent = currentPlayer;
-    this.classList.add(`${currentPlayer === playerX ? "x" : "o"}`);
+## Installation
 
-    if (checkWin(row, col)) {
-      setTimeout(() => {
-        alert(`Le joueur ${currentPlayer} a gagné !`);
-        score[currentPlayer]++;
-        updateScore();
-        resetBoard();
-      }, 100);
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/tic-tac-toe-20x20.git
+   ```
+2. Navigate to the project directory:
+   ```
+   cd tic-tac-toe-20x20
+   ```
+3. Open the `index.html` file in your preferred web browser.
 
-    } else if (checkDraw()) {
-      alert("Match nul !");
-      resetBoard();
-    } else {
-      currentPlayer = currentPlayer === playerX ? playerO : playerX;
-      updateCurrentPlayer();
-    }
-  }
-}
+## How to Play
 
-function checkWin(row, col) {
-  const right = [0, 1];
-  const down = [1, 0];
-  const diagonalDownRight = [1, 1];
-  const diagonalDownLeft = [1, -1];
+1. Open the game in your web browser.
+2. On the initial screen, each player selects their preferred symbol.
+3. After symbol selection, players are redirected to the game page.
+4. Players take turns clicking on empty cells to place their symbols.
+5. The game ends when a player forms a line of 5 symbols or the board is full.
 
-  const directions = [right, down, diagonalDownRight, diagonalDownLeft];
+## Game Interface
 
-  for (let i = 0; i < directions.length; i++) {
-    let direction = directions[i];
-    let dx = direction[0];
-    let dy = direction[1];
-    let count = 1;
+- The game displays a 20x20 grid representing the game board.
+- Each player's chosen symbol and current score are shown.
+- A message area indicates whose turn it is and announces the game result.
+- A "New Game" button is available to start a fresh game.
 
-    // Check in the positive direction (right, down, diagonal)
-    for (let j = 1; j < 5; j++) {
-      let newRow = row + j * dx;
-      let newCol = col + j * dy;
+## Game Mechanics
 
-      // Check if the new position is valid
-      if (newRow < 0 || newRow >= 20 || newCol < 0 || newCol >= 20 || gameBoard[newRow][newCol] !== currentPlayer) {
-        break;
-      }
-      count++;
-    }
+- The game alternates turns between players.
+- Clicking on an occupied cell is not allowed.
+- The game checks for a win condition after each move.
+- If a win is detected, the game ends and the winner is announced.
+- If all cells are filled without a winner, the game declares a draw.
 
-    // Check in the opposite direction (left, up, diagonal)
-    for (let j = 1; j < 5; j++) {
-      let newRow = row - j * dx;
-      let newCol = col - j * dy;
+## Additional Functions
 
-      // Check if the new position is valid
-      if (newRow < 0 || newRow >= 20 || newCol < 0 || newCol >= 20 || gameBoard[newRow][newCol] !== currentPlayer) {
-        break;
-      }
-      count++;
-    }
+- **Symbol Selection**: Players can choose their preferred symbols before the game starts.
+- **Score Tracking**: The game keeps track of each player's wins across multiple games.
+- **New Game**: Players can start a new game without refreshing the page.
 
-    if (count >= 5) {
-      return true;
-    }
-  }
+## Design and Responsiveness
 
-  return false;
-}
+- The game interface is designed to be visually appealing and user-friendly.
+- The layout is responsive and adapts to various screen sizes, including mobile devices and desktop computers.
 
-function checkDraw() {
-  return gameBoard.every((row) => row.every((cell) => cell !== ""));
-}
+## Code Structure
 
-function resetBoard() {
-  gameBoard = Array(20)
-    .fill()
-    .map(() => Array(20).fill(""));
-  document.querySelectorAll(".cell").forEach((cell) => {
-    cell.textContent = "";
-    cell.classList.remove("x", "o");
-  });
-  currentPlayer = "X";
-  updateCurrentPlayer();
-}
+The JavaScript code is organized into several key functions, each responsible for a specific aspect of the game:
 
-function updateCurrentPlayer() {
-  currentPlayerDisplay.textContent = `${currentPlayer}`;
-  currentPlayerIndicator.style.backgroundColor = currentPlayer === playerX ? "#ff4136" : "#159282";
-}
+1. `loadPlayerSymbols()`: 
+   - Retrieves the player symbols from local storage or prompts players to choose their symbols.
+   - Ensures each player has a unique symbol before starting the game.
 
-function updateScore() {
-  scoreX.textContent = `${score.X}`;
-  scoreO.textContent = `${score.O}`;
-}
+2. `createBoard()`: 
+   - Dynamically generates the 20x20 game board.
+   - Sets up event listeners for each cell on the board.
 
-function saveScore() {
-  localStorage.setItem("ticTacToeScore", JSON.stringify(score));
-}
+3. `handleCellClick(event)`: 
+   - Manages the logic when a player clicks on a cell.
+   - Updates the game state and checks for win/draw conditions.
+   - Switches turns between players.
 
-function loadScore() {
-  const savedScore = localStorage.getItem("ticTacToeScore");
-  if (savedScore) {
-    score = JSON.parse(savedScore);
-    updateScore();
-  }
-}
+4. `checkWin(row, col, symbol)`: 
+   - Checks if the current move results in a win.
+   - Verifies horizontal, vertical, and diagonal lines for 5 consecutive symbols.
 
-restartButton.addEventListener("click", () => {
-  resetBoard();
-  updateScore();
-});
+5. `checkDraw()`: 
+   - Determines if the game has ended in a draw (all cells filled with no winner).
 
-// Run on page load
-document.addEventListener("DOMContentLoaded", function () {
-  loadPlayerSymbols();
-  createBoard(20);
-  loadScore();
-});
+6. `resetBoard()`: 
+   - Clears the game board for a new game.
+   - Resets any game state variables to their initial values.
 
-window.addEventListener("beforeunload", saveScore);
+7. `updateCurrentPlayer()`: 
+   - Switches the active player after each move.
+   - Updates the UI to indicate whose turn it is.
+
+8. `updateScore(winner)`: 
+   - Increments the score for the winning player.
+   - Updates the score display in the UI.
+
+9. `saveScore()`: 
+   - Saves the current game scores to local storage.
+   - Ensures persistence of scores across page reloads.
+
+10. `loadScore()`: 
+    - Retrieves saved scores from local storage.
+    - Initializes the score display when the game loads.
+
+These functions work together to create a smooth and interactive gaming experience. The modular structure allows for easy maintenance and potential future enhancements.
+
+## Future Enhancements
+
+- Implement an AI opponent for single-player mode.
+- Add online multiplayer functionality.
+- Introduce different board sizes as game options.
+
+## Contributing
+
+Contributions to improve the game are welcome. Please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature.
+3. Commit your changes.
+4. Push to the branch.
+5. Create a new Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
