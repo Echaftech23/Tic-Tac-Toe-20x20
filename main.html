@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic Tac Toe 20x20 - MediaGame</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="logo">
+          <img src="/assets/images/logo.jpg" alt="MediaGame" />
+        </div>
+
+        <!-- Hamburger Menu Button -->
+        <button class="menu-toggle" aria-label="Toggle Menu">
+            &#9776;
+        </button>
+
+        <ul class="menu">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="about.html">A propos</a></li>
+            <li><a href="conditions.html">Conditions d'utilisation</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+      </nav>
+    </header>
+
+    <main id="game-container">
+      <div id="board"></div>
+      <!-- Info Panel -->
+      <div id="info-panel">
+        <h2>Informations du jeu</h2>
+        <div class="current-player-section">
+          <p>Joueur actuel :</p>
+          <div class="current-player-indicator">
+            <span id="current-player">X</span>
+          </div>
+        </div>
+
+        <div class="scoreboard-section">
+          <h3>Score :</h3>
+          <table class="scoreboard">
+            <tr>
+              <th id="joueurX">Joueur X</th>
+              <th id="joueurO">Joueur O</th>
+            </tr>
+            <tr>
+              <td id="score-x">0</td>
+              <td id="score-o">0</td>
+            </tr>
+          </table>
+        </div>
+        <button id="restart">Recommencer la partie</button>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Tic-Tac-Toe Game. All rights reserved.</p>
+    </footer>
+
+    <script src="assets/js/index.js"></script>
+  </body>
+</html>

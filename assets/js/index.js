@@ -6,16 +6,33 @@ const restartButton = document.getElementById("restart");
 const scoreX = document.getElementById("score-x");
 const scoreO = document.getElementById("score-o");
 
+const j1 = document.getElementById("joueurX");
+const j2 = document.getElementById("joueurO");
 
+
+j1.textContent = `Joueur ${localStorage.getItem("playerX")}`;
+j2.textContent = `Joueur ${localStorage.getItem("playerO")}`;
+
+// Toggle Menu :
 document.querySelector('.menu-toggle').addEventListener('click', function() {
   document.querySelector('.menu').classList.toggle('active');
 });
 
-let currentPlayer = "X";
+let currentPlayer;
 let gameBoard = Array(20)
   .fill()
   .map(() => Array(20).fill(""));
-let score = { X: 0, O: 0 };
+let score = { playerX: 0, playerO: 0 };
+
+// On game page load, retrieve symbols from local storage
+function loadPlayerSymbols() {
+  playerX = localStorage.getItem("playerX");
+  playerO = localStorage.getItem("playerO");
+
+  // Randomly decide who starts first
+  currentPlayer = Math.random() < 0.5 ? playerX : playerO;
+  updateCurrentPlayer();
+}
 
 function createBoard(col) {
   for (let i = 0; i < col * col; i++) {
@@ -39,50 +56,66 @@ function handleCellClick(e) {
   if (gameBoard[row][col] === "") {
     gameBoard[row][col] = currentPlayer;
     e.target.textContent = currentPlayer;
-    e.target.classList.add(currentPlayer.toLowerCase());
+    e.target.classList.add(`${currentPlayer === playerX ? "x" : "o"}`);
 
     if (checkWin(row, col)) {
-      alert(`Le joueur ${currentPlayer} a gagné !`);
-      score[currentPlayer]++;
-      updateScore();
-      resetBoard();
+      setTimeout(() => {
+        alert(`Le joueur ${currentPlayer} a gagné !`);
+        
+        currentPlayer === playerX ? score.playerX++ : score.playerO++;
+        score[currentPlayer]++;
+
+        updateScore();
+        resetBoard();
+      }, 100);
+
     } else if (checkDraw()) {
       alert("Match nul !");
       resetBoard();
     } else {
-      currentPlayer = currentPlayer === "X" ? "O" : "X";
+      currentPlayer = currentPlayer === playerX ? playerO : playerX;
       updateCurrentPlayer();
     }
   }
 }
 
 function checkWin(row, col) {
-  const directions = [
-    [0, 1],
-    [1, 0],
-    [1, 1],
-    [1, -1],
-  ];
+  const right = [0, 1];
+  const down = [1, 0];
+  const diagonalDownRight = [1, 1];
+  const diagonalDownLeft = [1, -1];
 
-  for (let [dx, dy] of directions) {
+  const directions = [right, down, diagonalDownRight, diagonalDownLeft];
+
+  for (let i = 0; i < directions.length; i++) {
+    let direction = directions[i];
+    let dx = direction[0];
+    let dy = direction[1];
     let count = 1;
-    for (let i = 1; i < 5; i++) {
-      const newRow = row + i * dx;
-      const newCol = col + i * dy;
-      if (newRow < 0 || newRow >= 20 || newCol < 0 || newCol >= 20 || gameBoard[newRow][newCol] !== currentPlayer) {
-          break;
-      }
-      count++;
-  }
 
-  for (let i = 1; i < 5; i++) {
-      const newRow = row - i * dx;
-      const newCol = col - i * dy;
+    // Check in the positive direction (right, down, diagonal)
+    for (let j = 1; j < 5; j++) {
+      let newRow = row + j * dx;
+      let newCol = col + j * dy;
+
+      // Check if the new position is valid
       if (newRow < 0 || newRow >= 20 || newCol < 0 || newCol >= 20 || gameBoard[newRow][newCol] !== currentPlayer) {
-          break;
+        break;
       }
       count++;
-  }
+    }
+
+    // Check in the opposite direction (left, up, diagonal)
+    for (let j = 1; j < 5; j++) {
+      let newRow = row - j * dx;
+      let newCol = col - j * dy;
+
+      // Check if the new position is valid
+      if (newRow < 0 || newRow >= 20 || newCol < 0 || newCol >= 20 || gameBoard[newRow][newCol] !== currentPlayer) {
+        break;
+      }
+      count++;
+    }
 
     if (count >= 5) {
       return true;
@@ -104,18 +137,18 @@ function resetBoard() {
     cell.textContent = "";
     cell.classList.remove("x", "o");
   });
-  currentPlayer = "X";
+  currentPlayer = Math.random() < 0.5 ? playerX : playerO;
   updateCurrentPlayer();
 }
 
 function updateCurrentPlayer() {
   currentPlayerDisplay.textContent = `${currentPlayer}`;
-  currentPlayerIndicator.style.backgroundColor = currentPlayer === "X" ? "#ff4136" : "#159282";
+  currentPlayerIndicator.style.backgroundColor = currentPlayer === playerX ? "#ff4136" : "#159282";
 }
 
 function updateScore() {
-  scoreX.textContent = `${score.X}`;
-  scoreO.textContent = `${score.O}`;
+  scoreX.textContent = `${score.playerX}`;
+  scoreO.textContent = `${score.playerO}`;
 }
 
 function saveScore() {
@@ -135,9 +168,11 @@ restartButton.addEventListener("click", () => {
   updateScore();
 });
 
-createBoard();
-updateScore();
-createBoard(20);
+// Run on page load
+document.addEventListener("DOMContentLoaded", function () {
+  loadPlayerSymbols();
+  createBoard(20);
+  loadScore();
+});
 
 window.addEventListener("beforeunload", saveScore);
-loadScore();
