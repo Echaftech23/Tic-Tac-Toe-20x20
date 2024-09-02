@@ -133,9 +133,8 @@ h1 {
     width: 31.2px;
     height: 31.2px;
     display: flex;
-    /* border-radius: 2px; */
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
