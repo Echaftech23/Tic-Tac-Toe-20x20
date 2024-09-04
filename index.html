@@ -15,61 +15,113 @@
         </div>
 
         <!-- Hamburger Menu Button -->
-        <button class="menu-toggle" aria-label="Toggle Menu">
-            &#9776;
-        </button>
+        <button class="menu-toggle" aria-label="Toggle Menu">&#9776;</button>
 
         <ul class="menu">
-            <li><a href="index.html">Accueil</a></li>
-            <li><a href="about.html">A propos</a></li>
-            <li><a href="conditions.html">Conditions d'utilisation</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="about.html">A propos</a></li>
+          <li><a href="conditions.html">Conditions d'utilisation</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
       </nav>
     </header>
 
     <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Welcome to Tic-Tac-Toe!</h1>
-                <p>Ready to challenge your friends? Set your symbols and start playing now!</p>
-                <form class="player-inputs">
-                    <label for="playerX">Player X Symbol:</label>
-                    <input type="text" id="playerX" name="playerX"  required placeholder="X">
-                    
-                    <label for="playerO">Player O Symbol:</label>
-                    <input type="text" id="playerO" name="playerO"  required placeholder="O">
-                    
-                    <button type="submit">Start Game</button>
-                </form>
+      <section class="hero">
+        <div class="hero-content">
+          <h1>Welcome to Tic-Tac-Toe!</h1>
+          <p>
+            Ready to challenge your friends? Set your symbols and start playing
+            now!
+          </p>
+          <form class="player-inputs">
+            <div class="container">
+              <div class="form-group">
+                <label for="board-size">Board Size:</label>
+                <select id="board-size" name="board-size">
+                  <option selected value="3">3x3</option>
+                  <option value="6">6x6</option>
+                  <option value="9">9x9</option>
+                  <option value="10">10x10</option>
+                  <option value="20">20x20</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="win-condition">Win Condition:</label>
+                <select id="win-condition" name="win-condition">
+                  <option selected value="3">3 in a row</option>
+                  <option value="4">4 in a row</option>
+                  <option value="5">5 in a row</option>
+                  <option value="6">6 in a row</option>
+                  <option value="10">10 in a row</option>
+                </select>
+              </div>
             </div>
-            <div class="hero-image">
-                <img src="/assets/images/main.png" alt="Tic-Tac-Toe Illustration">
-            </div>
-        </section>
+
+            <label for="playerX">Player X Symbol:</label>
+            <input
+              type="text"
+              id="playerX"
+              name="playerX"
+              required
+              placeholder="X"
+            />
+
+            <label for="playerO">Player O Symbol:</label>
+            <input
+              type="text"
+              id="playerO"
+              name="playerO"
+              required
+              placeholder="O"
+            />
+
+            <button type="submit">Start Game</button>
+          </form>
+        </div>
+        <div class="hero-image">
+          <img src="/assets/images/main.png" alt="Tic-Tac-Toe Illustration" />
+        </div>
+      </section>
     </main>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Tic-Tac-Toe Game. All rights reserved.</p>
+      <p>&copy; 2024 Tic-Tac-Toe Game. All rights reserved.</p>
     </footer>
 
     <script>
-      const playerX = document.getElementById('playerX');
-      const playerO = document.getElementById('playerO');
-      const form = document.querySelector('.player-inputs');
+      const playerX = document.getElementById("playerX");
+      const playerO = document.getElementById("playerO");
+      const boardSize = document.getElementById("board-size");
+      const winCondition = document.getElementById("win-condition");
+      const form = document.querySelector(".player-inputs");
 
-      form.addEventListener('submit', (e) => {
+      form.addEventListener("submit", (e) => {
         e.preventDefault();
         localStorage.clear();
-        
+
+        const boardSizeValue = parseInt(boardSize.value);
+        const winConditionValue = parseInt(winCondition.value);
+
+        console.log(boardSizeValue, winConditionValue);
+
         if (playerX.value && playerO.value) {
-          localStorage.setItem('playerX', playerX.value);
-          localStorage.setItem('playerO', playerO.value);
-          
-          window.location.href = 'main.html';
+          localStorage.setItem("playerX", playerX.value);
+          localStorage.setItem("playerO", playerO.value);
+
+          if (winConditionValue > boardSizeValue) {
+            alert("Win condition cannot be greater than the board size.");
+            return;
+          }
+
+          localStorage.setItem("boardSize", boardSize.value);
+          localStorage.setItem("winCondition", winCondition.value);
+
+          window.location.href = "main.html";
         } else {
-          alert('Please enter the symbols for both players');
+          alert("Please enter the symbols for both players");
         }
       });
     </script>

@@ -2,56 +2,86 @@ const board = document.getElementById("board");
 const currentPlayerDisplay = document.getElementById("current-player");
 const currentPlayerIndicator = document.querySelector(".current-player-indicator");
 const restartButton = document.getElementById("restart");
-
 const scoreX = document.getElementById("score-x");
 const scoreO = document.getElementById("score-o");
-
 const j1 = document.getElementById("joueurX");
 const j2 = document.getElementById("joueurO");
 
+let currentPlayer;
+let gameBoard;
+let boardSize = parseInt(localStorage.getItem("boardSize"));
+let winCondition = parseInt(localStorage.getItem("winCondition"));
+let score = { playerX: 0, playerO: 0 };
+let playerX, playerO;
 
 j1.textContent = `Joueur ${localStorage.getItem("playerX")}`;
 j2.textContent = `Joueur ${localStorage.getItem("playerO")}`;
 
-// Toggle Menu :
 document.querySelector('.menu-toggle').addEventListener('click', function() {
   document.querySelector('.menu').classList.toggle('active');
 });
 
-let currentPlayer;
-let gameBoard = Array(20)
-  .fill()
-  .map(() => Array(20).fill(""));
-let score = { playerX: 0, playerO: 0 };
-
-// On game page load, retrieve symbols from local storage
 function loadPlayerSymbols() {
   playerX = localStorage.getItem("playerX");
   playerO = localStorage.getItem("playerO");
-
-  // Randomly decide who starts first
   currentPlayer = Math.random() < 0.5 ? playerX : playerO;
   updateCurrentPlayer();
 }
 
-function createBoard(col) {
-  for (let i = 0; i < col * col; i++) {
+// update cell size based on screen width
+function calculateCellSize() {
+  const screenWidth = window.innerWidth;
+  const totalCells = boardSize * boardSize;
+  let maxBoardWidth;
+
+  if (screenWidth <= 600) {
+    maxBoardWidth = totalCells < 40 ? screenWidth * 0.55 : screenWidth * 0.7;
+  } else {
+    maxBoardWidth = totalCells < 100 ? screenWidth * 0.25 : screenWidth * 0.4;
+  }
+
+  return Math.floor(maxBoardWidth / boardSize);
+}
+
+function updateBoardSize() {
+  const cellSize = calculateCellSize();
+  document.documentElement.style.setProperty('--cell-size', `${cellSize}px`);
+  board.style.width = `${cellSize * boardSize}px`;
+  board.style.height = `${cellSize * boardSize}px`;
+}
+
+function createBoard() {
+  board.innerHTML = '';
+  gameBoard = Array(boardSize).fill().map(() => Array(boardSize).fill(""));
+
+  for (let i = 0; i < boardSize * boardSize; i++) {
     const cell = document.createElement("div");
     cell.classList.add("cell");
     cell.dataset.index = i;
     cell.addEventListener("click", handleCellClick);
     board.appendChild(cell);
-    board.style.gridTemplateColumns = `repeat(${col}, 1fr)`;
   }
+
+  board.style.gridTemplateColumns = `repeat(${boardSize}, 1fr)`;
+  updateBoardSize();
+  applyChessboardPattern();
+}
+
+function applyChessboardPattern() {
+  const cells = document.querySelectorAll('.cell');
+  cells.forEach((cell, index) => {
+      const row = Math.floor(index / boardSize);
+      const col = index % boardSize;
+      if ((row + col) % 2 === 0) {
+          cell.classList.add('light');
+      }
+  });
 }
 
 function handleCellClick(e) {
   const index = e.target.dataset.index;
-  const row = Math.floor(index / 20);
-  const col = index % 20;
-
-  e.target.style.borderRadius = "4px";
-  e.target.style.border = "1px solid #fff";
+  const row = Math.floor(index / boardSize);
+  const col = index % boardSize;
 
   if (gameBoard[row][col] === "") {
     gameBoard[row][col] = currentPlayer;
@@ -61,14 +91,10 @@ function handleCellClick(e) {
     if (checkWin(row, col)) {
       setTimeout(() => {
         alert(`Le joueur ${currentPlayer} a gagné !`);
-        
         currentPlayer === playerX ? score.playerX++ : score.playerO++;
-        score[currentPlayer]++;
-
         updateScore();
         resetBoard();
       }, 100);
-
     } else if (checkDraw()) {
       alert("Match nul !");
       resetBoard();
@@ -80,60 +106,41 @@ function handleCellClick(e) {
 }
 
 function checkWin(row, col) {
-  const right = [0, 1];
-  const down = [1, 0];
-  const diagonalDownRight = [1, 1];
-  const diagonalDownLeft = [1, -1];
+  const directions = [[0, 1], [1, 0], [1, 1], [1, -1]];
 
-  const directions = [right, down, diagonalDownRight, diagonalDownLeft];
-
-  for (let i = 0; i < directions.length; i++) {
-    let direction = directions[i];
-    let dx = direction[0];
-    let dy = direction[1];
+  for (let direction of directions) {
+    let [dx, dy] = direction;
     let count = 1;
 
-    // Check in the positive direction (right, down, diagonal)
-    for (let j = 1; j < 5; j++) {
-      let newRow = row + j * dx;
-      let newCol = col + j * dy;
-
-      // Check if the new position is valid
-      if (newRow < 0 || newRow >= 20 || newCol < 0 || newCol >= 20 || gameBoard[newRow][newCol] !== currentPlayer) {
-        break;
-      }
+    // Check in positive direction
+    for (let i = 1; i < winCondition; i++) {
+      let newRow = row + i * dx;
+      let newCol = col + i * dy;
+      if (newRow < 0 || newRow >= boardSize || newCol < 0 || newCol >= boardSize || gameBoard[newRow][newCol] !== currentPlayer) break;
       count++;
     }
 
-    // Check in the opposite direction (left, up, diagonal)
-    for (let j = 1; j < 5; j++) {
-      let newRow = row - j * dx;
-      let newCol = col - j * dy;
-
-      // Check if the new position is valid
-      if (newRow < 0 || newRow >= 20 || newCol < 0 || newCol >= 20 || gameBoard[newRow][newCol] !== currentPlayer) {
-        break;
-      }
+    // Check in negative direction
+    for (let i = 1; i < winCondition; i++) {
+      let newRow = row - i * dx;
+      let newCol = col - i * dy;
+      if (newRow < 0 || newRow >= boardSize || newCol < 0 || newCol >= boardSize || gameBoard[newRow][newCol] !== currentPlayer) break;
       count++;
     }
 
-    if (count >= 5) {
-      return true;
-    }
+    if (count >= winCondition) return true;
   }
 
   return false;
 }
 
 function checkDraw() {
-  return gameBoard.every((row) => row.every((cell) => cell !== ""));
+  return gameBoard.every(row => row.every(cell => cell !== ""));
 }
 
 function resetBoard() {
-  gameBoard = Array(20)
-    .fill()
-    .map(() => Array(20).fill(""));
-  document.querySelectorAll(".cell").forEach((cell) => {
+  gameBoard = Array(boardSize).fill().map(() => Array(boardSize).fill(""));
+  document.querySelectorAll(".cell").forEach(cell => {
     cell.textContent = "";
     cell.classList.remove("x", "o");
   });
@@ -168,10 +175,9 @@ restartButton.addEventListener("click", () => {
   updateScore();
 });
 
-// Run on page load
 document.addEventListener("DOMContentLoaded", function () {
   loadPlayerSymbols();
-  createBoard(20);
+  createBoard();
   loadScore();
 });
 

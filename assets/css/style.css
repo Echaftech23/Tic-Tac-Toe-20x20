@@ -4,6 +4,10 @@
     padding: 0;
 }
 
+:root {
+    --cell-size: 31.2px;
+  }
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -120,18 +124,18 @@ h1 {
     width: 85%;
     margin: 0 auto;
     display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #board {
-    width: 60%;
     display: grid;
-    grid-template-columns: repeat(20, 33px);
     border: 3px solid #333;
 }
 
 .cell {
-    width: 31.2px;
-    height: 31.2px;
+    width: var(--cell-size);
+    height: var(--cell-size);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -142,12 +146,7 @@ h1 {
     background-color: #000;
 }
 
-/* Applying chessboard pattern */
-.cell:nth-child(40n+1), .cell:nth-child(40n+3), .cell:nth-child(40n+5), .cell:nth-child(40n+7), 
-.cell:nth-child(40n+9), .cell:nth-child(40n+11), .cell:nth-child(40n+13), .cell:nth-child(40n+15),
-.cell:nth-child(40n+17), .cell:nth-child(40n+19), .cell:nth-child(40n+22), .cell:nth-child(40n+24),
-.cell:nth-child(40n+26), .cell:nth-child(40n+28), .cell:nth-child(40n+30), .cell:nth-child(40n+32),
-.cell:nth-child(40n+34), .cell:nth-child(40n+36), .cell:nth-child(40n+38), .cell:nth-child(40n+40) {
+.cell.light {
     background-color: #fff;
 }
 
@@ -175,6 +174,7 @@ h1 {
     border-radius: 4px;
     padding: 30px;
     flex: 1;
+    max-width: 350px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -285,11 +285,11 @@ h1 {
         grid-template-columns: repeat(20, 12px);
     }
 
-    .cell {
-        width: 12px;
-        height: 12px;
-        font-size: 12px;
-    }
+    /* .cell {
+        width: 15px;
+        height: 15px;
+        font-size: 15px;
+    } */
 
     #info-panel {
         width: 100%;
