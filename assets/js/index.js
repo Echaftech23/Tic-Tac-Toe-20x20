@@ -106,29 +106,46 @@ function handleCellClick(e) {
 }
 
 function checkWin(row, col) {
-  const directions = [[0, 1], [1, 0], [1, 1], [1, -1]];
+  const right = [0, 1];
+  const down = [1, 0];
+  const diagonalDownRight = [1, 1];
+  const diagonalDownLeft = [1, -1];
 
-  for (let direction of directions) {
-    let [dx, dy] = direction;
+  const directions = [right, down, diagonalDownRight, diagonalDownLeft];
+
+  for (let i = 0; i < directions.length; i++) {
+    let direction = directions[i];
+    let dx = direction[0];
+    let dy = direction[1];
     let count = 1;
 
-    // Check in positive direction
-    for (let i = 1; i < winCondition; i++) {
-      let newRow = row + i * dx;
-      let newCol = col + i * dy;
-      if (newRow < 0 || newRow >= boardSize || newCol < 0 || newCol >= boardSize || gameBoard[newRow][newCol] !== currentPlayer) break;
+    // Check in the positive direction (right, down, diagonal)
+    for (let j = 1; j < winCondition; j++) {
+      let newRow = row + j * dx;
+      let newCol = col + j * dy;
+
+      // Check if the new position is valid
+      if (newRow < 0 || newRow >= 20 || newCol < 0 || newCol >= 20 || gameBoard[newRow][newCol] !== currentPlayer) {
+        break;
+      }
       count++;
     }
 
-    // Check in negative direction
-    for (let i = 1; i < winCondition; i++) {
-      let newRow = row - i * dx;
-      let newCol = col - i * dy;
-      if (newRow < 0 || newRow >= boardSize || newCol < 0 || newCol >= boardSize || gameBoard[newRow][newCol] !== currentPlayer) break;
+    // Check in the opposite direction (left, up, diagonal)
+    for (let j = 1; j < winCondition; j++) {
+      let newRow = row - j * dx;
+      let newCol = col - j * dy;
+
+      // Check if the new position is valid
+      if (newRow < 0 || newRow >= 20 || newCol < 0 || newCol >= 20 || gameBoard[newRow][newCol] !== currentPlayer) {
+        break;
+      }
       count++;
     }
 
-    if (count >= winCondition) return true;
+    if (count >= winCondition) {
+      return true;
+    }
   }
 
   return false;
